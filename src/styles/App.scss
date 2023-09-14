@@ -1,0 +1,140 @@
+// Required
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/variables-dark';
+
+// $btn-primary-bg: #ff0000;
+@import '~bootstrap/scss/maps';
+@import '~bootstrap/scss/mixins';
+
+// Default variable overrides
+
+$light: white;
+
+// // Optional Bootstrap components here
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/utilities';
+@import 'bootstrap';
+
+/* @font-face {
+	font-family: 'Hanken Grotesk';
+	src: url('../assets/fonts/static/HankenGrotesk-Medium.ttf') format('truetype');
+	font-weight: 500;
+}
+@font-face {
+	font-family: 'Hanken Grotesk';
+	src: url('../assets/fonts/static/HankenGrotesk-Bold.ttf') format('truetype');
+	font-weight: 700;
+}
+@font-face {
+	font-family: 'Hanken Grotesk';
+	src: url('../assets/fonts/static/HankenGrotesk-ExtraBold.ttf') format('truetype');
+	font-weight: 800;
+} */
+
+* {
+	font-family: 'Poppins', sans-serif;
+	font-weight: 400;
+  font-style: italic;
+	color: red;
+	font-size: 32px;
+	
+	// font-weight: 500;
+}
+
+:root {
+	--bs-btn-bg: ;
+}
+
+
+
+body {
+	height: 100vh;
+	background-repeat: no-repeat;
+}
+
+.App{
+	background-color:hsl(0, 0%, 94%);
+}
+
+// form overwrites
+/* 
+.custom-form-control-wrapper {
+	position: relative; 
+	&::after {
+		content: '';
+		position: absolute;
+		top: -3px;
+		left: -3px;
+		right: -3px;
+		bottom: -3px;
+		border: 3px solid transparent;
+		border-radius: 14px;
+		z-index: -1;
+		background-image: linear-gradient(to right, hsl(249, 99%, 64%), hsl(278, 94%, 30%));
+		background-origin: border-box;
+		background-clip: content-box, border-box;
+		transition: border 0.3s;
+	}
+}
+
+.form-control {
+	border: 4px solid hsl(279, 6%, 55%); //transparent;
+	width: 100%;
+	padding: 14px;
+	border-radius: 10px; 
+	transition: border 0.3s;
+
+	&:focus {
+		outline: none;
+		border-color: transparent;
+		box-shadow: none;
+	}
+	&.is-invalid {
+		background-image: none;
+		&:focus {
+			box-shadow: none;
+		}
+	}
+}
+.invalid-feedback {
+	position: absolute;
+	bottom: -20px;
+}
+
+.input {
+	&-month {
+		padding-right: calc(var(--bs-gutter-x) * 0.2);
+	}
+	&-year {
+		padding-left: calc(var(--bs-gutter-x) * 0.2);
+	}
+}
+.exp-row-wrapper {
+	margin-left: -6px;
+	position: relative;
+}
+.exp-wrapper {
+	width: 45%;
+	padding: 0;
+}
+.display-invalid {
+	display: block;
+	left: 0;
+	&-shift {
+		left: 105px;
+	}
+}
+.card {
+	border: none;
+}
+
+@media (min-width: 1200px) {
+	#complete-notification,
+	#main-form {
+		position: absolute;
+		width: 500px !important;
+	}
+}
+ */
