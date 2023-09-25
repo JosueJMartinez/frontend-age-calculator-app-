@@ -4,10 +4,22 @@ import styles from '../styles/MainContainer.module.scss';
 import { Container, Card } from 'react-bootstrap';
 
 import { DateForm } from './DateForm';
+import { Display } from './Display';
 // import Header from './Header';
 // import Body from './Body';
 
 function MainContainer() {
+		const [date, setDate] = useState({
+			day: '',
+			month: '',
+			year: '',
+			complete: false,
+		});
+
+		const handleChange = date => {
+			setDate(date);
+		};
+
 	// const percentage = 72;
 
 	// const jsonData = [
@@ -80,8 +92,10 @@ function MainContainer() {
 			<Container className={styles.mainContainer}>
 				<Card className={`${styles.mainContainer_card} ${styles.card}`}>
 					<Card.Body>
-						<DateForm />
+						<DateForm handleChange={handleChange} date={date} />
+						<Display date={date}/>
 					</Card.Body>
+
 				</Card>
 			</Container>
 		</main>
