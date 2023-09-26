@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import moment from 'moment/moment';
 
 import styles from '../styles/MainContainer.module.scss';
 import { Button, Form, Row, Col } from 'react-bootstrap';
@@ -8,6 +9,11 @@ import iconArrow from '../assets/images/icon-arrow.svg';
 
 export function DateForm({ date, handleChange }) {
 	const { day, month, year } = { ...date };
+	const currentDate = new Date();
+	const currMonth = currentDate.getMonth() + 1;
+	const currYear = currentDate.getFullYear();
+	const currDate = currentDate.getDate();
+
 	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	const [isValid, setIsValid] = useState({
@@ -15,6 +21,34 @@ export function DateForm({ date, handleChange }) {
 		month: { isEmpty: false, isFormatted: true, isPast: true },
 		year: { isEmpty: false, isFormatted: true, isPast: true },
 	});
+
+	const [isWholeFormValid, setIsWholeFormValid] = useState(false);
+
+	const isInitialMount = useRef(true);
+
+	const checkIfFormComplete = useCallback(() => {
+		const firstDate = moment(`${currYear}-${currMonth}-${currDate}`);
+		const secondDate = moment(`${year}-${month}-${day}`);
+
+		const diffYears = firstDate.diff(secondDate, 'year');
+		secondDate.add(diffYears, 'years');
+
+		const diffMonths = firstDate.diff(secondDate, 'months');
+		secondDate.add(diffMonths, 'months');
+
+		const diffDays = firstDate.diff(secondDate, 'days');
+
+		console.log(`${diffYears} years, ${diffMonths} months, ${diffDays} days`);
+	}, [currDate, currMonth, currYear, year, month, day]);
+
+	useEffect(() => {
+		console.log('isValid.genericValid calculate');
+		if (isInitialMount.current) {
+			isInitialMount.current = false;
+		} else {
+			checkIfFormComplete();
+		}
+	}, [isWholeFormValid, checkIfFormComplete]);
 
 	const handleFormInputChange = e => {
 		let { name, value } = e.target;
@@ -58,17 +92,32 @@ export function DateForm({ date, handleChange }) {
 			checkForValueLimit: { min: 0, max: 31 },
 			name: 'day',
 		});
+
+		setIsWholeFormValid(arePropertiesMatching(isValid, false, true, true));
 	};
+
+	const arePropertiesMatching = (data, isEmptyValue, isFormattedValue, isPastValue) => {
+		for (const key in data) {
+			if (key !== 'genericValid') {
+				const item = data[key];
+				if (
+					item.isEmpty !== isEmptyValue ||
+					item.isFormatted !== isFormattedValue ||
+					item.isPast !== isPastValue
+				) {
+					return false; // At least one property does not match the specified values.
+				}
+			}
+		}
+		return true; // All properties match the specified values.
+	};
+
 	const genericValidate = (value, args) => {
 		const { checkForLengthAndNumber, checkForValueLimit, formatCardNumber, name } = { ...args };
-		const currentDate = new Date();
+
 		if (formatCardNumber) {
 			value = value.replace(/\s/g, '');
 		}
-
-		console.log(day, currentDate.getDate());
-
-		console.log(day > currentDate.getDate());
 
 		if (!value) {
 			setIsValid(prevState => ({
@@ -90,13 +139,8 @@ export function DateForm({ date, handleChange }) {
 			}
 		}
 
-		console.log('new Date(year/month/day)');
-		console.log(`${year}/${month}/${day}`);
-		console.log(new Date(`${year}/${month}/${day}`));
-
-		const currMonth = currentDate.getMonth() + 1;
-		const currYear = currentDate.getFullYear();
-		const currDate = currentDate.getDate();
+		/* console.log(`!moment(${day}-${month}-${year}).isValid()`);
+		console.log(!moment(`${year}-${month}-${day}`).isValid()); */
 
 		if (name === 'year' && value > currYear) {
 			setIsValid(prevState => ({
@@ -117,6 +161,11 @@ export function DateForm({ date, handleChange }) {
 			setIsValid(prevState => ({
 				...prevState,
 				[name]: { ...prevState[name], isPast: false },
+			}));
+		} else if (name === 'day' && !moment(`${year}-${month}-${day}`).isValid()) {
+			setIsValid(prevState => ({
+				...prevState,
+				[name]: { ...prevState[name], isFormatted: false },
 			}));
 		}
 	};

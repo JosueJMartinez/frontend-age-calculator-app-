@@ -25,21 +25,6 @@ export function Display({ date }) {
 				{/* className={styles.card_number}> */}
 				{day ? day : '--'} days
 			</div>
-			<div>
-				{' '}
-				{/* className={styles.card_number}> */}
-				{currentDate.getFullYear()} Year
-			</div>
-			<div>
-				{' '}
-				{/* className={styles.card_number}> */}
-				{currentDate.getMonth() + 1} month
-			</div>
-			<div>
-				{' '}
-				{/* className={styles.card_number}> */}
-				{currentDate.getDate()} days
-			</div>
 		</div>
 	);
 }
