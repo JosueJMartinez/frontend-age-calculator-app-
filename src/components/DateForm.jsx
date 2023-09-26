@@ -8,8 +8,6 @@ import iconArrow from '../assets/images/icon-arrow.svg';
 // import Body from './Body';
 
 export function DateForm({ handleDurationDateChange }) {
-	
-
 	const currentDate = new Date();
 	const currMonth = currentDate.getMonth() + 1;
 	const currYear = currentDate.getFullYear();
@@ -20,7 +18,7 @@ export function DateForm({ handleDurationDateChange }) {
 	const { day, month, year } = { ...formDate };
 
 	const [isValid, setIsValid] = useState({
-		day: { isEmpty: false, isFormatted: true, isPast: true },
+		day: { isEmpty: false, isFormatted: true, isPast: true, isValidDate: true },
 		month: { isEmpty: false, isFormatted: true, isPast: true },
 		year: { isEmpty: false, isFormatted: true, isPast: true },
 	});
@@ -57,7 +55,7 @@ export function DateForm({ handleDurationDateChange }) {
 				const diffDays = firstDate.diff(secondDate, 'days');
 
 				handleDurationDateChange({ day: diffDays, month: diffMonths, year: diffYears });
-			}else{
+			} else {
 				handleDurationDateChange({ day: '', month: '', year: '' });
 			}
 		}
@@ -74,15 +72,33 @@ export function DateForm({ handleDurationDateChange }) {
 			value = modifyTwoDigit(value);
 		}
 
-		setIsValid(prevState => ({
-			...prevState,
-			[name]: { ...prevState[name], isEmpty: false, isFormatted: true, isPast: true },
-		}));
+		if (name === 'day')
+			setIsValid(prevState => ({
+				...prevState,
+				[name]: {
+					...prevState[name],
+					isEmpty: false,
+					isFormatted: true,
+					isPast: true,
+					isValidDate: true,
+				},
+			}));
+		else
+			setIsValid(prevState => ({
+				...prevState,
+				[name]: {
+					...prevState[name],
+					isEmpty: false,
+					isFormatted: true,
+					isPast: true,
+					// isValidDate: true,
+				},
+			}));
 
 		// const prevState = ;
 		dateForEffect.current = { ...dateForEffect.current, [name]: value };
 		// console.log(dateForEffect.current);
-		
+
 		setFormDate(prevState => ({ ...prevState, [name]: value }));
 	};
 
@@ -114,16 +130,32 @@ export function DateForm({ handleDurationDateChange }) {
 		setIsSubmitted(true);
 	};
 
-	const arePropertiesMatching = (data, isEmptyValue, isFormattedValue, isPastValue) => {
+	const arePropertiesMatching = (
+		data,
+		isEmptyValue,
+		isFormattedValue,
+		isPastValue,
+		isValidDate = true
+	) => {
+		console.log(data);
 		for (const key in data) {
-			if (key !== 'genericValid') {
-				const item = data[key];
+			const item = data[key];
+			if (key === 'day') {
+				if (
+					item.isEmpty !== isEmptyValue ||
+					item.isFormatted !== isFormattedValue ||
+					item.isPast !== isPastValue ||
+					item.isValidDate !== isValidDate
+				) {
+					return false;
+				}
+			} else {
 				if (
 					item.isEmpty !== isEmptyValue ||
 					item.isFormatted !== isFormattedValue ||
 					item.isPast !== isPastValue
 				) {
-					return false; // At least one property does not match the specified values.
+					return false;
 				}
 			}
 		}
@@ -180,7 +212,7 @@ export function DateForm({ handleDurationDateChange }) {
 		} else if (name === 'day' && !moment(`${year}-${month}-${day}`).isValid()) {
 			setIsValid(prevState => ({
 				...prevState,
-				[name]: { ...prevState[name], isFormatted: false },
+				[name]: { ...prevState[name], isValidDate: false },
 			}));
 		}
 	};
@@ -210,7 +242,7 @@ export function DateForm({ handleDurationDateChange }) {
 								name='day'
 								value={day}
 								onChange={handleFormInputChange}
-								isInvalid={isValid.day.isEmpty || !isValid.day.isFormatted || !isValid.day.isPast}
+								isInvalid={isValid.day.isEmpty || !isValid.day.isFormatted || !isValid.day.isPast || !isValid.day.isValidDate}
 							/>
 							{isValid.day.isEmpty && (
 								<Form.Control.Feedback type='invalid'>Day is Blank</Form.Control.Feedback>
@@ -220,6 +252,9 @@ export function DateForm({ handleDurationDateChange }) {
 							)}
 							{!isValid.day.isPast && (
 								<Form.Control.Feedback type='invalid'>Must be in the past</Form.Control.Feedback>
+							)}
+							{!isValid.day.isValidDate && (
+								<Form.Control.Feedback type='invalid'>This is an invalid date.</Form.Control.Feedback>
 							)}
 						</div>
 					</Form.Group>
