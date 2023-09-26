@@ -9,16 +9,16 @@ import { Display } from './Display';
 // import Body from './Body';
 
 function MainContainer() {
-		const [date, setDate] = useState({
-			day: '',
-			month: '',
-			year: '',
-			complete: false,
-		});
+	const [durationDate, setDurationDate] = useState({
+		day: '',
+		month: '',
+		year: '',
+		complete: false,
+	});
 
-		const handleChange = date => {
-			setDate(date);
-		};
+	const handleDurationDateChange = durationDate => {
+		setDurationDate(durationDate);
+	};
 
 	// const percentage = 72;
 
@@ -92,10 +92,9 @@ function MainContainer() {
 			<Container className={styles.mainContainer}>
 				<Card className={`${styles.mainContainer_card} ${styles.card}`}>
 					<Card.Body>
-						<DateForm handleChange={handleChange} date={date} />
-						<Display date={date}/>
+						<DateForm handleDurationDateChange={handleDurationDateChange} />
+						<Display date={durationDate} />
 					</Card.Body>
-
 				</Card>
 			</Container>
 		</main>

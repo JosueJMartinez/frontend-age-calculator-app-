@@ -7,14 +7,17 @@ import iconArrow from '../assets/images/icon-arrow.svg';
 // import Header from './Header';
 // import Body from './Body';
 
-export function DateForm({ date, handleChange }) {
-	const { day, month, year } = { ...date };
+export function DateForm({ handleDurationDateChange }) {
+	
+
 	const currentDate = new Date();
 	const currMonth = currentDate.getMonth() + 1;
 	const currYear = currentDate.getFullYear();
 	const currDate = currentDate.getDate();
 
-	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [formDate, setFormDate] = useState({ day: '', month: '', year: '' });
+
+	const { day, month, year } = { ...formDate };
 
 	const [isValid, setIsValid] = useState({
 		day: { isEmpty: false, isFormatted: true, isPast: true },
@@ -22,58 +25,72 @@ export function DateForm({ date, handleChange }) {
 		year: { isEmpty: false, isFormatted: true, isPast: true },
 	});
 
-	const [isWholeFormValid, setIsWholeFormValid] = useState(false);
+	// const [isWholeFormValid, setIsWholeFormValid] = useState(false);
+	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	const isInitialMount = useRef(true);
 
-	const checkIfFormComplete = useCallback(() => {
-		const firstDate = moment(`${currYear}-${currMonth}-${currDate}`);
-		const secondDate = moment(`${year}-${month}-${day}`);
+	let dateForEffect = useRef({ currYear, currMonth, currDate, year, month, day });
 
-		const diffYears = firstDate.diff(secondDate, 'year');
-		secondDate.add(diffYears, 'years');
-
-		const diffMonths = firstDate.diff(secondDate, 'months');
-		secondDate.add(diffMonths, 'months');
-
-		const diffDays = firstDate.diff(secondDate, 'days');
-
-		console.log(`${diffYears} years, ${diffMonths} months, ${diffDays} days`);
-	}, [currDate, currMonth, currYear, year, month, day]);
+	// const handleDurationCallback = useCallback(handleDurationDateChange,[])
 
 	useEffect(() => {
-		console.log('isValid.genericValid calculate');
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
 		} else {
-			checkIfFormComplete();
+			/* console.log('isWholeFormValid: ', isWholeFormValid)
+			console.log('isSubmitted: ', isWholeFormValid) */
+			if (arePropertiesMatching(isValid, false, true, true) && isSubmitted) {
+				const firstDate = moment(
+					`${dateForEffect.current.currYear}-${dateForEffect.current.currMonth}-${dateForEffect.current.currDate}`
+				);
+				const secondDate = moment(
+					`${dateForEffect.current.year}-${dateForEffect.current.month}-${dateForEffect.current.day}`
+				);
+
+				const diffYears = firstDate.diff(secondDate, 'year');
+				secondDate.add(diffYears, 'years');
+
+				const diffMonths = firstDate.diff(secondDate, 'months');
+				secondDate.add(diffMonths, 'months');
+
+				const diffDays = firstDate.diff(secondDate, 'days');
+
+				handleDurationDateChange({ day: diffDays, month: diffMonths, year: diffYears });
+			}else{
+				handleDurationDateChange({ day: '', month: '', year: '' });
+			}
 		}
-	}, [isWholeFormValid, checkIfFormComplete]);
+	}, [isSubmitted]);
 
 	const handleFormInputChange = e => {
 		let { name, value } = e.target;
+		// setIsWholeFormValid(false);
+		setIsSubmitted(false);
 
 		// if (name === 'cardNumber') value = formatCardNumber(value);
 
-		/* if (name === 'cardExpYear' || name === 'cardExpMonth') {
-				value = modifyTwoDigit(value);
-			} */
+		if (name === 'month' || name === 'day') {
+			value = modifyTwoDigit(value);
+		}
 
 		setIsValid(prevState => ({
 			...prevState,
 			[name]: { ...prevState[name], isEmpty: false, isFormatted: true, isPast: true },
 		}));
 
-		handleChange({
-			...date,
-			[name]: value,
-		});
+		// const prevState = ;
+		dateForEffect.current = { ...dateForEffect.current, [name]: value };
+		// console.log(dateForEffect.current);
+		
+		setFormDate(prevState => ({ ...prevState, [name]: value }));
 	};
 
 	const handleSubmit = evt => {
+		// console.log('submitting');
 		evt.preventDefault();
 
-		setIsSubmitted(prevState => !prevState);
+		// setIsSubmitted(prevState => !prevState);
 
 		genericValidate(month, {
 			checkForLengthAndNumber: 2,
@@ -92,8 +109,9 @@ export function DateForm({ date, handleChange }) {
 			checkForValueLimit: { min: 0, max: 31 },
 			name: 'day',
 		});
-
-		setIsWholeFormValid(arePropertiesMatching(isValid, false, true, true));
+		// const test = arePropertiesMatching(isValid, false, true, true);
+		// setIsWholeFormValid(test);
+		setIsSubmitted(true);
 	};
 
 	const arePropertiesMatching = (data, isEmptyValue, isFormattedValue, isPastValue) => {
@@ -139,9 +157,6 @@ export function DateForm({ date, handleChange }) {
 			}
 		}
 
-		/* console.log(`!moment(${day}-${month}-${year}).isValid()`);
-		console.log(!moment(`${year}-${month}-${day}`).isValid()); */
-
 		if (name === 'year' && value > currYear) {
 			setIsValid(prevState => ({
 				...prevState,
@@ -173,6 +188,13 @@ export function DateForm({ date, handleChange }) {
 	const isNumberSpecificLen = (str, len) => {
 		const regexPattern = new RegExp(`^\\d{${len}}$`);
 		return regexPattern.test(str);
+	};
+
+	const modifyTwoDigit = value => {
+		if (value.length === 1) value = '0' + value;
+		else if (value.length === 3 && value[0] === '0') value = value.slice(1);
+		else value = value.slice(0, value.length - 1);
+		return value;
 	};
 
 	return (
