@@ -26,7 +26,7 @@
 	position: relative;
 	top: -52px;
 	padding: 20px;
-	border-radius: 3rem;
+	border-radius: 4rem;
 	height: 70px;
 	width: 70px;
 	background-color: hsl(259, 100%, 65%);
@@ -39,5 +39,21 @@
 	}
 	&:active {
 		background-color: hsl(0, 0%, 8%);
+	}
+}
+
+@media (min-width: 768px) {
+	.display_container {
+		li {
+			font-size: 80px;
+			span {
+				font-size: 80px;
+			}
+		}
+	}
+	:not(.btn-check) + button.button {
+		height: 90px;
+		width: 90px;
+		top: -60px;
 	}
 }

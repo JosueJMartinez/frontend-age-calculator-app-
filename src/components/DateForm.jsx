@@ -32,7 +32,7 @@ export function DateForm({ handleDurationDateChange }) {
 			if (window.innerWidth < 768) {
 				setButtonPosition({ right: `-${seperatorWidth / 2 - 35}px` });
 			} else {
-				setButtonPosition({ right: `-${seperatorWidth - 70}px` });
+				setButtonPosition({ right: `-${seperatorWidth - 90}px` });
 			}
 		};
 

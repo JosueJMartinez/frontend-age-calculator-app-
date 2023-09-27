@@ -15,8 +15,10 @@
 }
 @media (min-width: 768px) {
 	.mainContainer {
+		padding-top: 5%;
 		&_card.card {
 			width: 700px;
+			padding: 1.5rem;
 		}
 	}
 }
