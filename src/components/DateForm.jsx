@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import moment from 'moment/moment';
 
 import styles from '../styles/DateForm.module.scss';
@@ -20,13 +20,10 @@ export function DateForm({ handleDurationDateChange }) {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [buttonPosition, setButtonPosition] = useState({});
 
-	// const [isWholeFormValid, setIsWholeFormValid] = useState(false);
 	const isInitialMount = useRef(true);
 
 	const { day, month, year } = { ...formDate };
 	let dateForEffect = useRef({ currYear, currMonth, currDate, year, month, day });
-
-	// const handleDurationCallback = useCallback(handleDurationDateChange,[])
 
 	useEffect(() => {
 		const handleWindowResize = () => {
@@ -35,8 +32,7 @@ export function DateForm({ handleDurationDateChange }) {
 			if (window.innerWidth < 768) {
 				setButtonPosition({ right: `-${seperatorWidth / 2 - 35}px` });
 			} else {
-				setButtonPosition({ right: `-${seperatorWidth-70}px` });
-				console.log('we got desktop');
+				setButtonPosition({ right: `-${seperatorWidth - 70}px` });
 			}
 		};
 
@@ -78,10 +74,8 @@ export function DateForm({ handleDurationDateChange }) {
 
 	const handleFormInputChange = e => {
 		let { name, value } = e.target;
-		// setIsWholeFormValid(false);
-		setIsSubmitted(false);
 
-		// if (name === 'cardNumber') value = formatCardNumber(value);
+		setIsSubmitted(false);
 
 		if (name === 'month' || name === 'day') {
 			value = modifyTwoDigit(value);
@@ -106,11 +100,9 @@ export function DateForm({ handleDurationDateChange }) {
 					isEmpty: false,
 					isFormatted: true,
 					isPast: true,
-					// isValidDate: true,
 				},
 			}));
 
-		// const prevState = ;
 		dateForEffect.current = { ...dateForEffect.current, [name]: value };
 
 		setFormDate(prevState => ({ ...prevState, [name]: value }));
