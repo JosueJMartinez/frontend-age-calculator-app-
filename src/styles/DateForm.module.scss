@@ -1,0 +1,43 @@
+.breaker {
+	margin-top: 80px;
+}
+
+.line_splitter {
+	color: hsl(0, 0%, 86%);
+	background-color: hsl(0, 0%, 86%);
+	height: 2px;
+}
+
+.custom_form_control_wrapper {
+	.input_wrapper {
+		position: relative;
+	}
+	label {
+		font-weight: 700;
+		color: hsl(0, 1%, 44%);
+		font-style: normal;
+		&.is_invalid {
+			color: hsl(0, 100%, 67%);
+		}
+	}
+}
+
+	:not(.btn-check) + button.button {
+		position: relative;
+		top: -52px;
+		padding: 20px;
+		border-radius: 3rem;
+		height: 70px;
+		width: 70px;
+		background-color: hsl(259, 100%, 65%);
+		.button_arrow {
+			height: 26px;
+		}
+		&:hover {
+			background-color: hsl(0, 0%, 8%);
+		}
+		&:active {
+			background-color: hsl(0, 0%, 8%);
+		}
+	}
+

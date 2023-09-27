@@ -17,45 +17,63 @@ $light: white;
 @import '~bootstrap/scss/utilities';
 @import 'bootstrap';
 
-/* @font-face {
-	font-family: 'Hanken Grotesk';
-	src: url('../assets/fonts/static/HankenGrotesk-Medium.ttf') format('truetype');
-	font-weight: 500;
-}
-@font-face {
-	font-family: 'Hanken Grotesk';
-	src: url('../assets/fonts/static/HankenGrotesk-Bold.ttf') format('truetype');
-	font-weight: 700;
-}
-@font-face {
-	font-family: 'Hanken Grotesk';
-	src: url('../assets/fonts/static/HankenGrotesk-ExtraBold.ttf') format('truetype');
-	font-weight: 800;
-} */
 
 * {
 	font-family: 'Poppins', sans-serif;
 	font-weight: 400;
-  font-style: italic;
+	font-style: italic;
 	color: red;
-	font-size: 16px;
-	
-	// font-weight: 500;
+	font-size: 14px;
 }
 
 :root {
 	--bs-btn-bg: ;
 }
 
-
-
 body {
 	height: 100vh;
 	background-repeat: no-repeat;
 }
 
-.App{
-	background-color:hsl(0, 0%, 94%);
+.App {
+	background-color: hsl(0, 0%, 94%);
+}
+
+.form-control {
+	border: 1px solid hsl(0, 0%, 86%); //transparent;
+	width: 100%;
+	padding: 10px 0 10px 14px;
+	border-radius: 10px;
+	transition: border 0.3s;
+	font-size: 22px;
+	font-weight: 700;
+	font-style: normal;
+	color: hsl(0, 0%, 8%);
+	caret-color: hsl(259, 100%, 65%);
+	&::placeholder {
+		color: hsl(0, 1%, 44%);
+	}
+	&:focus {
+		outline: none;
+		border-color: hsl(259, 100%, 65%);
+		box-shadow: none;
+	}
+	&.is-invalid {
+		background-image: none;
+		padding-right: 0;
+		border-color: hsl(0, 100%, 67%);
+		&:focus {
+			box-shadow: none;
+		}
+	}
+	&:hover {
+		cursor: pointer;
+	}
+}
+.invalid-feedback {
+	position: absolute;
+	color: hsl(0, 100%, 67%);
+	line-height: 15px;
 }
 
 // form overwrites
