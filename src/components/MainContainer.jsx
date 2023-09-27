@@ -11,7 +11,6 @@ function MainContainer() {
 		day: '',
 		month: '',
 		year: '',
-		complete: false,
 	});
 
 	const handleDurationDateChange = durationDate => {
