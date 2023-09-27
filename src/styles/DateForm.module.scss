@@ -22,23 +22,22 @@
 	}
 }
 
-	:not(.btn-check) + button.button {
-		position: relative;
-		top: -52px;
-		padding: 20px;
-		border-radius: 3rem;
-		height: 70px;
-		width: 70px;
-		background-color: hsl(259, 100%, 65%);
-		border: none;
-		.button_arrow {
-			height: 26px;
-		}
-		&:hover {
-			background-color: hsl(0, 0%, 8%);
-		}
-		&:active {
-			background-color: hsl(0, 0%, 8%);
-		}
+:not(.btn-check) + button.button {
+	position: relative;
+	top: -52px;
+	padding: 20px;
+	border-radius: 3rem;
+	height: 70px;
+	width: 70px;
+	background-color: hsl(259, 100%, 65%);
+	border: none;
+	.button_arrow {
+		height: 26px;
 	}
-
+	&:hover {
+		background-color: hsl(0, 0%, 8%);
+	}
+	&:active {
+		background-color: hsl(0, 0%, 8%);
+	}
+}
