@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import moment from 'moment/moment';
 
-import styles from '../styles/MainContainer.module.scss';
+import styles from '../styles/DateForm.module.scss';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import iconArrow from '../assets/images/icon-arrow.svg';
 // import Header from './Header';
@@ -36,8 +36,6 @@ export function DateForm({ handleDurationDateChange }) {
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
 		} else {
-			/* console.log('isWholeFormValid: ', isWholeFormValid)
-			console.log('isSubmitted: ', isWholeFormValid) */
 			if (arePropertiesMatching(isValid, false, true, true) && isSubmitted) {
 				const firstDate = moment(
 					`${dateForEffect.current.currYear}-${dateForEffect.current.currMonth}-${dateForEffect.current.currDate}`
@@ -97,16 +95,12 @@ export function DateForm({ handleDurationDateChange }) {
 
 		// const prevState = ;
 		dateForEffect.current = { ...dateForEffect.current, [name]: value };
-		// console.log(dateForEffect.current);
 
 		setFormDate(prevState => ({ ...prevState, [name]: value }));
 	};
 
 	const handleSubmit = evt => {
-		// console.log('submitting');
 		evt.preventDefault();
-
-		// setIsSubmitted(prevState => !prevState);
 
 		genericValidate(month, {
 			checkForLengthAndNumber: 2,
@@ -117,7 +111,6 @@ export function DateForm({ handleDurationDateChange }) {
 		genericValidate(year, {
 			checkForLengthAndNumber: 4,
 			name: 'year',
-			// checkForValueLimit: { min: 0, max: 99 },
 		});
 
 		genericValidate(day, {
@@ -125,8 +118,6 @@ export function DateForm({ handleDurationDateChange }) {
 			checkForValueLimit: { min: 0, max: 31 },
 			name: 'day',
 		});
-		// const test = arePropertiesMatching(isValid, false, true, true);
-		// setIsWholeFormValid(test);
 		setIsSubmitted(true);
 	};
 
@@ -137,7 +128,6 @@ export function DateForm({ handleDurationDateChange }) {
 		isPastValue,
 		isValidDate = true
 	) => {
-		console.log(data);
 		for (const key in data) {
 			const item = data[key];
 			if (key === 'day') {
@@ -159,7 +149,7 @@ export function DateForm({ handleDurationDateChange }) {
 				}
 			}
 		}
-		return true; // All properties match the specified values.
+		return true;
 	};
 
 	const genericValidate = (value, args) => {
@@ -174,11 +164,13 @@ export function DateForm({ handleDurationDateChange }) {
 				...prevState,
 				[name]: { ...prevState[name], isEmpty: true },
 			}));
+			return;
 		} else if (checkForLengthAndNumber && !isNumberSpecificLen(value, checkForLengthAndNumber)) {
 			setIsValid(prevState => ({
 				...prevState,
 				[name]: { ...prevState[name], isFormatted: false },
 			}));
+			return;
 		} else if (checkForValueLimit) {
 			const testValue = +value;
 			if (testValue < checkForValueLimit.min || testValue > checkForValueLimit.max) {
@@ -186,6 +178,7 @@ export function DateForm({ handleDurationDateChange }) {
 					...prevState,
 					[name]: { ...prevState[name], isFormatted: false },
 				}));
+				return;
 			}
 		}
 
@@ -233,16 +226,31 @@ export function DateForm({ handleDurationDateChange }) {
 		<Form id='main-form' className='w-100 mt-5' onSubmit={handleSubmit}>
 			<Row>
 				<Col xs={4} md={3}>
-					<Form.Group controlId='day'>
-						<Form.Label>DAY</Form.Label>
-						<div className='custom-form-control-wrapper'>
+					<Form.Group controlId='day' className={styles.custom_form_control_wrapper}>
+						<Form.Label
+							className={
+								(isValid.day.isEmpty ||
+									!isValid.day.isFormatted ||
+									!isValid.day.isPast ||
+									!isValid.day.isValidDate) &&
+								styles.is_invalid
+							}
+						>
+							DAY
+						</Form.Label>
+						<div className={styles.input_wrapper}>
 							<Form.Control
 								type='text'
 								placeholder='DD'
 								name='day'
 								value={day}
 								onChange={handleFormInputChange}
-								isInvalid={isValid.day.isEmpty || !isValid.day.isFormatted || !isValid.day.isPast || !isValid.day.isValidDate}
+								isInvalid={
+									isValid.day.isEmpty ||
+									!isValid.day.isFormatted ||
+									!isValid.day.isPast ||
+									!isValid.day.isValidDate
+								}
 							/>
 							{isValid.day.isEmpty && (
 								<Form.Control.Feedback type='invalid'>Day is Blank</Form.Control.Feedback>
@@ -254,15 +262,24 @@ export function DateForm({ handleDurationDateChange }) {
 								<Form.Control.Feedback type='invalid'>Must be in the past</Form.Control.Feedback>
 							)}
 							{!isValid.day.isValidDate && (
-								<Form.Control.Feedback type='invalid'>This is an invalid date.</Form.Control.Feedback>
+								<Form.Control.Feedback type='invalid'>
+									This is an invalid date.
+								</Form.Control.Feedback>
 							)}
 						</div>
 					</Form.Group>
 				</Col>
 				<Col xs={4} md={3}>
-					<Form.Group controlId='month'>
-						<Form.Label>MONTH</Form.Label>
-						<div className='custom-form-control-wrapper'>
+					<Form.Group controlId='month' className={styles.custom_form_control_wrapper}>
+						<Form.Label
+							className={
+								(isValid.month.isEmpty || !isValid.month.isFormatted || !isValid.month.isPast) &&
+								styles.is_invalid
+							}
+						>
+							MONTH
+						</Form.Label>
+						<div className={styles.input_wrapper}>
 							<Form.Control
 								type='text'
 								placeholder='MM'
@@ -286,9 +303,16 @@ export function DateForm({ handleDurationDateChange }) {
 					</Form.Group>
 				</Col>
 				<Col xs={4} md={3}>
-					<Form.Group controlId='year'>
-						<Form.Label>YEAR</Form.Label>
-						<div className='custom-form-control-wrapper'>
+					<Form.Group controlId='year' className={styles.custom_form_control_wrapper}>
+						<Form.Label
+							className={
+								(isValid.year.isEmpty || !isValid.year.isFormatted || !isValid.year.isPast) &&
+								styles.is_invalid
+							}
+						>
+							YEAR
+						</Form.Label>
+						<div className={styles.input_wrapper}>
 							<Form.Control
 								type='text'
 								placeholder='YYYY'
@@ -312,28 +336,18 @@ export function DateForm({ handleDurationDateChange }) {
 					</Form.Group>
 				</Col>
 			</Row>
-			<div
-				style={{
-					position: 'relative',
-				}}
-			>
-				<hr
-					style={{
-						color: 'red',
-						backgroundColor: 'red',
-						height: 2,
-					}}
-				/>
+			<div className={styles.breaker}>
+				<hr className={styles.line_splitter} />
 				<Button
 					variant='primary'
 					type='submit'
 					style={{
-						position: 'absolute',
-						top: -35,
-						right: 135,
+						// width of div:position relative/2 - button with border and padding divided by two
+						right: -124,
 					}}
+					className={styles.button}
 				>
-					<img src={iconArrow} alt='credit-card-logo' className={styles.card_logo} />
+					<img src={iconArrow} alt='credit-card-logo' className={styles.button_arrow} />
 				</Button>
 			</div>
 		</Form>
