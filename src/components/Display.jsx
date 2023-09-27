@@ -1,30 +1,16 @@
-// import styles from '../styles/CreditCard.module.scss';
+import styles from '../styles/Display.module.scss';
 // import CreditCardIcon from '../images/card-logo.svg';
 
 export function Display({ date }) {
-	const { day, month, year } = { ...date };
-	const currentDate = new Date();
+	const loopThroughDate = () => {
+		const keys = Object.keys(date);
+		console.log(date);
+		return keys.map(key => (
+			<li key={key}>
+				<span>{date[key] !== '' ? date[key] : '--'}</span> {date[key] === 1 ? key : `${key}s`}
+			</li>
+		));
+	};
 
-	return (
-		<div>
-			{' '}
-			{/* className={`${styles.credit_card_front} ${styles.credit_card}`}> */}
-			<img /> {/* alt='credit-card-logo' className={styles.card_logo} />  */}
-			<div>
-				{' '}
-				{/* className={styles.card_expiration}> */}
-				{year ? year : '--'} years
-			</div>
-			<div>
-				{' '}
-				{/* className={styles.card_name}> */}
-				{month ? month : '--'} months
-			</div>
-			<div>
-				{' '}
-				{/* className={styles.card_number}> */}
-				{day ? day : '--'} days
-			</div>
-		</div>
-	);
+	return <ul className={styles.display_container}>{loopThroughDate()}</ul>;
 }
