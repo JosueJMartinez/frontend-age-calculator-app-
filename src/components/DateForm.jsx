@@ -4,8 +4,6 @@ import moment from 'moment/moment';
 import styles from '../styles/DateForm.module.scss';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import iconArrow from '../assets/images/icon-arrow.svg';
-// import Header from './Header';
-// import Body from './Body';
 
 export function DateForm({ handleDurationDateChange }) {
 	const currentDate = new Date();
@@ -14,23 +12,42 @@ export function DateForm({ handleDurationDateChange }) {
 	const currDate = currentDate.getDate();
 
 	const [formDate, setFormDate] = useState({ day: '', month: '', year: '' });
-
-	const { day, month, year } = { ...formDate };
-
 	const [isValid, setIsValid] = useState({
 		day: { isEmpty: false, isFormatted: true, isPast: true, isValidDate: true },
 		month: { isEmpty: false, isFormatted: true, isPast: true },
 		year: { isEmpty: false, isFormatted: true, isPast: true },
 	});
+	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [buttonPosition, setButtonPosition] = useState({});
 
 	// const [isWholeFormValid, setIsWholeFormValid] = useState(false);
-	const [isSubmitted, setIsSubmitted] = useState(false);
-
 	const isInitialMount = useRef(true);
 
+	const { day, month, year } = { ...formDate };
 	let dateForEffect = useRef({ currYear, currMonth, currDate, year, month, day });
 
 	// const handleDurationCallback = useCallback(handleDurationDateChange,[])
+
+	useEffect(() => {
+		const handleWindowResize = () => {
+			const seperatorWidth = document.querySelector(`#seperator`).offsetWidth;
+
+			if (window.innerWidth < 768) {
+				setButtonPosition({ right: `-${seperatorWidth / 2 - 35}px` });
+			} else {
+				setButtonPosition({ right: `-${seperatorWidth-70}px` });
+				console.log('we got desktop');
+			}
+		};
+
+		if (isInitialMount.current) {
+			handleWindowResize();
+		}
+		window.addEventListener('resize', handleWindowResize);
+		return () => {
+			window.removeEventListener('resize', handleWindowResize);
+		};
+	}, []);
 
 	useEffect(() => {
 		if (isInitialMount.current) {
@@ -336,18 +353,15 @@ export function DateForm({ handleDurationDateChange }) {
 					</Form.Group>
 				</Col>
 			</Row>
-			<div className={styles.breaker}>
+			<div id='seperator' className={styles.breaker}>
 				<hr className={styles.line_splitter} />
-				<Button
-					variant='primary'
-					type='submit'
-					style={{
-						// width of div:position relative/2 - button with border and padding divided by two
-						right: -124,
-					}}
-					className={styles.button}
-				>
-					<img src={iconArrow} alt='credit-card-logo' className={styles.button_arrow} />
+				<Button variant='primary' type='submit' style={buttonPosition} className={styles.button}>
+					<img
+						id='arrow-button'
+						src={iconArrow}
+						alt='credit-card-logo'
+						className={styles.button_arrow}
+					/>
 				</Button>
 			</div>
 		</Form>
