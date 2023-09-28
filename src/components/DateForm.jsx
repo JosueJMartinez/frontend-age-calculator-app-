@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import moment from 'moment/moment';
 
 import styles from '../styles/DateForm.module.scss';
-import { Button, Form, Row, Col } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
 import iconArrow from '../assets/images/icon-arrow.svg';
 import { Input } from './Input';
 
