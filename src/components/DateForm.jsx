@@ -4,6 +4,7 @@ import moment from 'moment/moment';
 import styles from '../styles/DateForm.module.scss';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import iconArrow from '../assets/images/icon-arrow.svg';
+import { Input } from './Input';
 
 export function DateForm({ handleDurationDateChange }) {
 	const currentDate = new Date();
@@ -234,116 +235,27 @@ export function DateForm({ handleDurationDateChange }) {
 	return (
 		<Form id='main-form' className='w-100 mt-5' onSubmit={handleSubmit}>
 			<Row>
-				<Col xs={4} md={3}>
-					<Form.Group controlId='day' className={styles.custom_form_control_wrapper}>
-						<Form.Label
-							className={
-								(isValid.day.isEmpty ||
-									!isValid.day.isFormatted ||
-									!isValid.day.isPast ||
-									!isValid.day.isValidDate) &&
-								styles.is_invalid
-							}
-						>
-							DAY
-						</Form.Label>
-						<div className={styles.input_wrapper}>
-							<Form.Control
-								type='text'
-								placeholder='DD'
-								name='day'
-								value={day}
-								onChange={handleFormInputChange}
-								isInvalid={
-									isValid.day.isEmpty ||
-									!isValid.day.isFormatted ||
-									!isValid.day.isPast ||
-									!isValid.day.isValidDate
-								}
-							/>
-							{isValid.day.isEmpty && (
-								<Form.Control.Feedback type='invalid'>Day is Blank</Form.Control.Feedback>
-							)}
-							{!isValid.day.isFormatted && (
-								<Form.Control.Feedback type='invalid'>Day is not valid</Form.Control.Feedback>
-							)}
-							{!isValid.day.isPast && (
-								<Form.Control.Feedback type='invalid'>Must be in the past</Form.Control.Feedback>
-							)}
-							{!isValid.day.isValidDate && (
-								<Form.Control.Feedback type='invalid'>
-									This is an invalid date.
-								</Form.Control.Feedback>
-							)}
-						</div>
-					</Form.Group>
-				</Col>
-				<Col xs={4} md={3}>
-					<Form.Group controlId='month' className={styles.custom_form_control_wrapper}>
-						<Form.Label
-							className={
-								(isValid.month.isEmpty || !isValid.month.isFormatted || !isValid.month.isPast) &&
-								styles.is_invalid
-							}
-						>
-							MONTH
-						</Form.Label>
-						<div className={styles.input_wrapper}>
-							<Form.Control
-								type='text'
-								placeholder='MM'
-								name='month'
-								value={month}
-								onChange={handleFormInputChange}
-								isInvalid={
-									isValid.month.isEmpty || !isValid.month.isFormatted || !isValid.month.isPast
-								}
-							/>
-							{isValid.month.isEmpty && (
-								<Form.Control.Feedback type='invalid'>Month is Blank</Form.Control.Feedback>
-							)}
-							{!isValid.month.isFormatted && (
-								<Form.Control.Feedback type='invalid'>Month is not valid</Form.Control.Feedback>
-							)}
-							{!isValid.month.isPast && (
-								<Form.Control.Feedback type='invalid'>Must be in the past</Form.Control.Feedback>
-							)}
-						</div>
-					</Form.Group>
-				</Col>
-				<Col xs={4} md={3}>
-					<Form.Group controlId='year' className={styles.custom_form_control_wrapper}>
-						<Form.Label
-							className={
-								(isValid.year.isEmpty || !isValid.year.isFormatted || !isValid.year.isPast) &&
-								styles.is_invalid
-							}
-						>
-							YEAR
-						</Form.Label>
-						<div className={styles.input_wrapper}>
-							<Form.Control
-								type='text'
-								placeholder='YYYY'
-								name='year'
-								value={year}
-								onChange={handleFormInputChange}
-								isInvalid={
-									isValid.year.isEmpty || !isValid.year.isFormatted || !isValid.year.isPast
-								}
-							/>
-							{isValid.year.isEmpty && (
-								<Form.Control.Feedback type='invalid'>Year is Blank</Form.Control.Feedback>
-							)}
-							{!isValid.year.isFormatted && (
-								<Form.Control.Feedback type='invalid'>Year is not valid</Form.Control.Feedback>
-							)}
-							{!isValid.year.isPast && (
-								<Form.Control.Feedback type='invalid'>Must be in the past</Form.Control.Feedback>
-							)}
-						</div>
-					</Form.Group>
-				</Col>
+				<Input
+					styles={styles}
+					isValid={isValid.day}
+					value={day}
+					type={'day'}
+					handleFormInputChange={handleFormInputChange}
+				/>
+				<Input
+					styles={styles}
+					isValid={isValid.month}
+					value={month}
+					type={'month'}
+					handleFormInputChange={handleFormInputChange}
+				/>
+				<Input
+					styles={styles}
+					isValid={isValid.year}
+					value={year}
+					type={'year'}
+					handleFormInputChange={handleFormInputChange}
+				/>
 			</Row>
 			<div id='seperator' className={styles.breaker}>
 				<hr className={styles.line_splitter} />
