@@ -1,23 +1,17 @@
 import styles from '../styles/Display.module.scss';
-import { useSpring, animated } from 'react-spring';
 
 export function Display({ date }) {
-	const fadeIn = useSpring({
-		opacity: date['year'] !== '' ? 1 : 0,
-		config: { duration: 1000 },
-	});
-	const fadeOut = useSpring({
-		opacity: date['year'] !== '' ? 0 : 1,
-		config: { duration: 1000 },
-	});
 	const loopThroughDate = () => {
 		const keys = Object.keys(date);
 
 		return keys.map(key => (
 			<li key={key}>
-				<animated.span style={date[key] !== '' ? fadeIn : fadeOut}>
-					{date[key] !== '' ? date[key] : '--'}
-				</animated.span>
+				<span className={`${styles.character} ${date[key] !== '' ? styles.transformed : ''}`}>
+					{'-- '}
+				</span>
+				<span className={`${styles.character} ${date[key] !== '' ? '' : styles.transformed}`}>
+					{`${date[key]} `}
+				</span>
 				{date[key] === 1 ? key : `${key}s`}
 			</li>
 		));

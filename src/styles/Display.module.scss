@@ -13,6 +13,16 @@
 	}
 }
 
+.character {
+	opacity: 1;
+	transition: opacity 0.3s ease; /* Adjust the transition duration as needed */
+	&.transformed {
+		opacity: 0;
+		transition: opacity 0.3s ease; /* Adjust the transition duration as needed */
+		position: absolute;
+	}
+}
+
 @media (min-width: 768px) {
 	.display_container {
 		li {
